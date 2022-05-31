@@ -1,56 +1,75 @@
 package ru.netology;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Radio {
     private int currentStation;
     private int currentVolume;
+    private int countOfStations = 10;
+    private int firstStation = 0;
+    private int lastStation = 9;
+    private int minVolume = 0;
+    private int maxVolume = 100;
 
-    public int getCurrentStation() {
-        return currentStation;
+    public Radio(int countOfChannels) {
+        this.countOfStations = countOfChannels;
+        this.lastStation = countOfChannels - 1;
     }
 
     public void setCurrentStation(int currentStation) {
-        if ((currentStation >= 0) && (currentStation <= 9)) {
+        if ((currentStation < this.getFirstStation()) || (currentStation > this.getLastStation())) {
+            return;
+        } else {
             this.currentStation = currentStation;
         }
     }
 
     public void nextStation() {
-        if (currentStation == 9) {
-            currentStation = 0;
+        if (currentStation == getLastStation()) {
+            currentStation = getFirstStation();
             return;
+        } else {
+            setCurrentStation(++currentStation);
         }
-        currentStation++;
     }
 
     public void prevStation() {
-        if (currentStation == 0) {
-            currentStation = 9;
+        if (currentStation == getFirstStation()) {
+            currentStation = getLastStation();
             return;
+        } else {
+            setCurrentStation(--currentStation);
         }
-        currentStation--;
     }
 
-    public int getCurrentVolume() {
-        return currentVolume;
-    }
 
     public void setCurrentVolume(int currentVolume) {
-        if ((currentVolume < 0) || (currentVolume > 10)) {
+        if ((currentVolume > this.getMaxVolume()) || (currentVolume < this.getMinVolume())) {
             return;
+        } else {
+            this.currentVolume = currentVolume;
         }
-        this.currentVolume = currentVolume;
     }
 
     public void increaseVolume() {
-        if (currentVolume < 10) {
-            currentVolume++;
+        if (currentVolume >= getMaxVolume()) {
+            return;
         }
+        setCurrentVolume(++currentVolume);
     }
 
     public void decreaseVolume() {
-        if (currentVolume > 0) {
-            currentVolume--;
+        if (currentVolume <= getMinVolume()) {
+            return;
+        } else {
+            setCurrentVolume(--currentVolume);
         }
     }
-
 }

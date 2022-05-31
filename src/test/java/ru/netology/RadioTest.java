@@ -1,146 +1,151 @@
 package ru.netology;
 
 import org.junit.jupiter.api.Assertions;
-
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class RadioTest {
-    @Test
-    void shouldNotAcceptMoreThenMaximum() {
+    @ParameterizedTest
+    @CsvSource(value = {
+            "lowerPreLimitValue  | -1 | 0",
+            "equalLowerLimitValue|  0 | 0",
+            "lowerPostLimitValue |  1 | 1",
+            "upperPreLimitValue  |  8 | 8",
+            "equalUpperLimitValue|  9 | 9",
+            "upperPostLimitValue | 10 | 0",
+    }, delimiter = '|')
+    void shouldSetCurrentStationCorrectly(String testName, int inputStation, int expected) {
         Radio rd = new Radio();
 
-        rd.setCurrentStation(10);
-        int expected = 0;
+        rd.setCurrentStation(inputStation);
 
         Assertions.assertEquals(expected, rd.getCurrentStation());
     }
 
-    @Test
-    void shouldNotAcceptLessThenMin() {
-        Radio rd = new Radio();
+    @ParameterizedTest
+    @CsvSource(value = {
+            "shouldSelectNextStation  | 8 | 9",
+            "shouldSelectFirstStation | 9 | 0"
+    }, delimiter = '|')
+    void shouldChangeStation(String testName, int currentSt, int expected) {
+        Radio radevo = new Radio();
 
-        rd.setCurrentStation(-1);
-        int expected = 0;
+        radevo.setCurrentStation(currentSt);
+        radevo.nextStation();
+
+        Assertions.assertEquals(expected, radevo.getCurrentStation());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "shouldSelectPrevStation  | 9 | 8",
+            "shouldSelectLastStation  | 0 | 9"
+    }, delimiter = '|')
+    void shouldChangeStation2(String testName, int currentSt, int expected) {
+        Radio radevo = new Radio();
+
+        radevo.setCurrentStation(currentSt);
+        radevo.prevStation();
+
+        Assertions.assertEquals(expected, radevo.getCurrentStation());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "lowerPreLimitValue  |  -1 |  0",
+            "equalLowerLimitValue|   0 |  0",
+            "lowerPostLimitValue |   1 |  1",
+            "upperPreLimitValue  |  98 | 98",
+            "equalUpperLimitValue|  99 | 99",
+            "upperPostLimitValue | 100 |  0",
+    }, delimiter = '|')
+    void setCurrentStForCustomConstruct(String testName, int inputStation, int expected) {
+        Radio rd = new Radio(100);
+
+        rd.setCurrentStation(inputStation);
 
         Assertions.assertEquals(expected, rd.getCurrentStation());
     }
 
-    @Test
-    void shouldSelectNextStation() {
+    @ParameterizedTest
+    @CsvSource(value = {
+            "shouldSelectNextStation  | 98 | 99",
+            "shouldSelectFirstStation | 99 |  0"
+    }, delimiter = '|')
+    void shouldChangeStationForCustom(String testName, int currentSt, int expected) {
+        Radio radevo = new Radio(100);
+
+        radevo.setCurrentStation(currentSt);
+        radevo.nextStation();
+
+        Assertions.assertEquals(expected, radevo.getCurrentStation());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "shouldSelectPrevStation  | 99 | 98",
+            "shouldSelectLastStation  |  0 | 99"
+    }, delimiter = '|')
+    void shouldChangeStationForCustom2(String testName, int currentSt, int expected) {
+        Radio radevo = new Radio(100);
+
+        radevo.setCurrentStation(currentSt);
+        radevo.prevStation();
+
+        Assertions.assertEquals(expected, radevo.getCurrentStation());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "lowerPreLimitValue  |  -1 |   0",
+            "equalLowerLimitValue|   0 |   0",
+            "lowerPostLimitValue |   1 |   1",
+            "upperPreLimitValue  |  99 |  99",
+            "equalUpperLimitValue| 100 | 100",
+            "upperPostLimitValue | 101 |   0",
+    }, delimiter = '|')
+    void shouldSetVolumeCorrectly(String testName, int inputVolume, int expected) {
         Radio rd = new Radio();
 
-        rd.setCurrentStation(2);
-        rd.nextStation();
-        int expected = 3;
+        rd.setCurrentVolume(inputVolume);
 
-        Assertions.assertEquals(expected, rd.getCurrentStation());
+        Assertions.assertEquals(expected, rd.getCurrentVolume());
     }
 
-    @Test
-    void shouldSelectFirstStation() {
-        Radio radivo = new Radio();
-
-        radivo.setCurrentStation(9);
-        radivo.nextStation();
-        int expected = 0;
-
-        Assertions.assertEquals(expected, radivo.getCurrentStation());
-    }
-
-    @Test
-    void shouldSelectLastStation() {
+    @ParameterizedTest
+    @CsvSource(value = {
+            "preMaxLimitValue | 99 | 100",
+            "MaxLimitValue    | 100 | 100"
+    }, delimiter = '|')
+    void shouldIncreaseVolume(String testname, int currentVolume, int expected) {
         Radio radio = new Radio();
 
-        radio.setCurrentStation(0);
-        radio.prevStation();
-        int exptected = 9;
-
-        Assertions.assertEquals(exptected, radio.getCurrentStation());
-    }
-
-    @Test
-    void shouldSetVolume() {
-        Radio radio = new Radio();
-
-        radio.setCurrentVolume(5);
-        int er = 5;
-
-        Assertions.assertEquals(er, radio.getCurrentVolume());
-    }
-
-    @Test
-    void shouldNotSetVolume() {
-        Radio rd = new Radio();
-
-        rd.setCurrentVolume(150);
-        int er = 0;
-
-        Assertions.assertEquals(er, rd.getCurrentVolume());
-    }
-
-    @Test
-    void shouldNotSetVolumeLow() {
-        Radio rd = new Radio();
-
-        rd.setCurrentVolume(-10);
-        int er = 0;
-
-        Assertions.assertEquals(er, rd.getCurrentVolume());
-    }
-
-    @Test
-    void shouldSetPrevStation() {
-        Radio rd = new Radio();
-
-        rd.setCurrentStation(7);
-        rd.prevStation();
-        int er = 6;
-
-        Assertions.assertEquals(er, rd.getCurrentStation());
-    }
-
-    @Test
-    void shouldIncreaseVolume() {
-        Radio radio = new Radio();
-
-        radio.setCurrentVolume(5);
+        radio.setCurrentVolume(currentVolume);
         radio.increaseVolume();
-        int er = 6;
 
-        Assertions.assertEquals(er, radio.getCurrentVolume());
+        Assertions.assertEquals(expected, radio.getCurrentVolume());
     }
 
-    @Test
-    void shouldNotIncreaseVolume() {
-        Radio rd = new Radio();
-
-        rd.setCurrentVolume(10);
-        rd.increaseVolume();
-        int er = 10;
-
-        Assertions.assertEquals(er, rd.getCurrentVolume());
-    }
-
-    @Test
-    void shouldNotDecreaseVolume() {
-        Radio rad = new Radio();
-
-        rad.setCurrentVolume(0);
-        rad.decreaseVolume();
-        int er = 0;
-
-        Assertions.assertEquals(er, rad.getCurrentVolume());
-    }
-
-    @Test
-    void shouldDecreaseVolume() {
+    @ParameterizedTest
+    @CsvSource(value = {
+            "preMinLimitValue | 1 | 0",
+            "MinLimitValue    | 0 | 0"
+    }, delimiter = '|')
+    void shouldDecreaseVolume(String testname, int currentVolume, int expected) {
         Radio radio = new Radio();
 
-        radio.setCurrentVolume(5);
+        radio.setCurrentVolume(currentVolume);
         radio.decreaseVolume();
-        int er = 4;
 
-        Assertions.assertEquals(er, radio.getCurrentVolume());
+        Assertions.assertEquals(expected, radio.getCurrentVolume());
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"0", "1", "50", "100500", "-100500"}, delimiter = ',')
+    void shouldReturnCountOfStations(int inputValue) {
+        Radio radio = new Radio(inputValue);
+
+        Assertions.assertEquals(inputValue, radio.getCountOfStations());
     }
 }
