@@ -23,34 +23,6 @@ public class Radio {
         this.lastStation = countOfChannels - 1;
     }
 
-    public int getCountOfStations() {
-        return countOfStations;
-    }
-
-    public int getFirstStation() {
-        return firstStation;
-    }
-
-    public int getLastStation() {
-        return lastStation;
-    }
-
-    public int getCurrentStation() {
-        return currentStation;
-    }
-
-    public int getMinVolume() {
-        return minVolume;
-    }
-
-    public int getMaxVolume() {
-        return maxVolume;
-    }
-
-    public int getCurrentVolume() {
-        return currentVolume;
-    }
-
     public void setCurrentStation(int currentStation) {
         if ((currentStation < this.getFirstStation()) || (currentStation > this.getLastStation())) {
             return;
